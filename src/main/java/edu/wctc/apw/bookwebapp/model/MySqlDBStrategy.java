@@ -15,6 +15,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +130,7 @@ public class MySqlDBStrategy implements DBStrategy {
 
     }
     @Override
-    public void addOneRecord(String tableName, Author author ) throws SQLException{
+    public void addOneRecord(String tableName, ArrayList<String> record ) throws SQLException{
         
    //     String sql = "INSERT INTO table_name (column1,column2,column3,...)\n" +
    //                  "VALUES (value1,value2,value3,...);";
@@ -146,28 +147,43 @@ public class MySqlDBStrategy implements DBStrategy {
         ResultSetMetaData rsmd = rs.getMetaData();
         
         int columnNumber = rsmd.getColumnCount();
-       // System.out.println(columnNumber);   this equals 3 so thats right.
+       
+        // test
+        // System.out.println(columnNumber);   this equals 3 so thats right.
         for(int i = 1; i <= columnNumber; i++){
             if( i < columnNumber){
             columnName = columnName + rsmd.getColumnName(i) + ", ";
-            valuePlaceHolder = valuePlaceHolder + "?, ";
+            valuePlaceHolder = valuePlaceHolder + "?,";
         }
             else if(i == columnNumber){
-                columnName = columnName + rsmd.getCatalogName(i) + ") ";
-                valuePlaceHolder = valuePlaceHolder + "? )";
+                columnName = columnName + rsmd.getColumnName(i) + ") ";
+                valuePlaceHolder = valuePlaceHolder + "?)";
             }
         }
+        System.out.println(columnName);
+        System.out.println(valuePlaceHolder);
         
+        String sql2 = "INSERT INTO " + tableName + " ( " + columnName
+                     + "VALUES (" + valuePlaceHolder ;
         
-        String sq2 = "\"INSERT INTO table_name ( " + columnName
-                     + "VALUES (" + valuePlaceHolder;
+        // test
+        //System.out.println(sql2);
         
+        PreparedStatement pstmt = conn.prepareStatement(sql2);
         
+       
         
+        for(int i = 1; i <= columnNumber; i++){
+            pstmt.setString(i, record.get(i - 1));
+       }
+        System.out.println(columnName);
+        System.out.println(pstmt);
         
-       // PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.executeUpdate();
         
-        
+//test
+//        rs = stmt.executeQuery(sql1);
+//        System.out.println(rs);
     }
     
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
@@ -175,7 +191,11 @@ public class MySqlDBStrategy implements DBStrategy {
         DBStrategy db = new MySqlDBStrategy();
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
         System.out.println(db.findAllRecords("author", 0).toString());
-        db.addOneRecord("author", new Author() );
+        ArrayList<String> record = new ArrayList<>();
+        record.add(null);
+        record.add("Jack Authorson");
+        record.add("2015-11-11");
+        db.addOneRecord("author", record); 
         System.out.println(db.findAllRecords("author", 0).toString());
         db.closeConnection();
         
