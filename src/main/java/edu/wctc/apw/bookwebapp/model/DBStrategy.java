@@ -6,6 +6,7 @@
 package edu.wctc.apw.bookwebapp.model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,5 +27,5 @@ public abstract void openConnection(String driverClass, String url,
     
     public void deleteOneRecord(String tableName, String id) throws ClassNotFoundException, SQLException;
     
-    public void addOneRecord(String tableName, Author author ) throws SQLException;
+    public void addOneRecord(String tableName, ArrayList<String> record ) throws SQLException;
 }
