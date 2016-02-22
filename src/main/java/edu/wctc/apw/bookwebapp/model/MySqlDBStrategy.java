@@ -206,6 +206,7 @@ public class MySqlDBStrategy implements DBStrategy {
     }
     
     
+    @Override
     public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
                              String pkColumnName, Object value )
                              throws SQLException, Exception
@@ -273,7 +274,7 @@ public class MySqlDBStrategy implements DBStrategy {
 		return conn_loc.prepareStatement(finalSQL);
 	}
     
-    
+    @Override
     public void insertNewRecordbyId (String tableName, ArrayList<String> record, int id ) throws SQLException{
         // is this not CreateNewRecordInTabledOneRecord method..? 
         String columnName = "";
@@ -294,6 +295,7 @@ public class MySqlDBStrategy implements DBStrategy {
         for(int i = 1; i <= columnNumber; i++){
             if( i < columnNumber){
             columnName = columnName + rsmd.getColumnName(i) + ", ";
+            
             valuePlaceHolder = valuePlaceHolder + "?,";
         }
             else if(i == columnNumber){
@@ -341,20 +343,30 @@ public class MySqlDBStrategy implements DBStrategy {
         DBStrategy db = new MySqlDBStrategy();
 //        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
 //        System.out.println(db.findAllRecords("author", 0).toString());
-//        ArrayList<String> record = new ArrayList<>();
-//        record.add(null);
-//        record.add("Jack Authorson");
-//        record.add("2015-11CreateNewRecordInTable     db.addOneRecord("author", record); 
-//        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
-        List<String> colNames = Arrays.asList("author_name");
-        List<Object> colValues = Arrays.asList("Lucifer MorningStar");
+        ArrayList<String> record = new ArrayList<>();
+        record.add(null);
+        record.add("Jack Kerouac");
+        record.add("2015-11-01");
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
-        int result = db.updateRecords("author", colNames, colValues, "author_id", 4);
+        db.insertNewRecordbyId("author", record, 3); 
         db.closeConnection();
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
         List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
         db.closeConnection();
+//        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
+//        List<String> colNames = Arrays.asList("author_name");
+//        List<Object> colValues = Arrays.asList("Lucifer MorningStar");
+//        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
+//        int result = db.updateRecords("author", colNames, colValues, "author_id", 4);
+//        db.closeConnection();
+//        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
+//        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
+        db.closeConnection();
         System.out.println(rawData);
+        
+        
+        
+        
     }
     
 }

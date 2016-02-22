@@ -34,4 +34,7 @@ public interface DBStrategy {
     public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
             String pkColumnName, Object value)
             throws SQLException, Exception;
+    
+    public void insertNewRecordbyId (String tableName, ArrayList<String> record, int id ) throws SQLException;
+    
 }
