@@ -149,7 +149,7 @@ public class MySqlDBStrategy implements DBStrategy {
     
     
     @Override
-    public void addOneRecord(String tableName, ArrayList<String> record ) throws SQLException{
+    public void CreateNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException{
         
    //     String sql = "INSERT INTO table_name (column1,column2,column3,...)\n" +
    //                  "VALUES (value1,value2,value3,...);";
@@ -195,8 +195,8 @@ public class MySqlDBStrategy implements DBStrategy {
         for(int i = 1; i <= columnNumber; i++){
             pstmt.setString(i, record.get(i - 1));
        }
-        System.out.println(columnName);
-        System.out.println(pstmt);
+    //    System.out.println(columnName);
+    //    System.out.println(pstmt);
         
         pstmt.executeUpdate();
         
@@ -274,6 +274,68 @@ public class MySqlDBStrategy implements DBStrategy {
 	}
     
     
+    public void insertNewRecordbyId (String tableName, ArrayList<String> record, int id ) throws SQLException{
+        // is this not CreateNewRecordInTabledOneRecord method..? 
+        String columnName = "";
+        String sql1 = "Select * from " + tableName;
+        String valuePlaceHolder = "";
+        
+        
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql1);
+         
+        
+        ResultSetMetaData rsmd = rs.getMetaData();
+        
+        int columnNumber = rsmd.getColumnCount();
+       
+        // test
+        // System.out.println(columnNumber);   this equals 3 so thats right.
+        for(int i = 1; i <= columnNumber; i++){
+            if( i < columnNumber){
+            columnName = columnName + rsmd.getColumnName(i) + ", ";
+            valuePlaceHolder = valuePlaceHolder + "?,";
+        }
+            else if(i == columnNumber){
+                columnName = columnName + rsmd.getColumnName(i) + ") ";
+                valuePlaceHolder = valuePlaceHolder + "?)";
+            }
+        }
+        System.out.println(columnName);
+        System.out.println(valuePlaceHolder);
+        
+        String sql2 = "INSERT INTO " + tableName + " ( " + columnName
+                     + "VALUES (" + valuePlaceHolder + "where " + columnName + "=" + id ;
+        
+        // test
+        //System.out.println(sql2);
+        
+        PreparedStatement pstmt = conn.prepareStatement(sql2);
+        
+       
+        
+        for(int i = 1; i <= columnNumber; i++){
+            pstmt.setString(i, record.get(i - 1));
+       }
+    //    System.out.println(columnName);
+    //    System.out.println(pstmt);
+        
+        pstmt.executeUpdate();
+    }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     public static void main(String[] args) throws ClassNotFoundException, SQLException, Exception {
         
         DBStrategy db = new MySqlDBStrategy();
@@ -282,8 +344,7 @@ public class MySqlDBStrategy implements DBStrategy {
 //        ArrayList<String> record = new ArrayList<>();
 //        record.add(null);
 //        record.add("Jack Authorson");
-//        record.add("2015-11-11");
-//        db.addOneRecord("author", record); 
+//        record.add("2015-11CreateNewRecordInTable     db.addOneRecord("author", record); 
 //        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
         List<String> colNames = Arrays.asList("author_name");
         List<Object> colValues = Arrays.asList("Lucifer MorningStar");
