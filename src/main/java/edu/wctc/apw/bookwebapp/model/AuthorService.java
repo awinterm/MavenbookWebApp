@@ -24,4 +24,8 @@ public class AuthorService {
         List<Author> authors = srv.getAuthorList();
         System.out.println(authors);
     }
+    
+    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException{
+        return dao.deleteAuthorById(id);
+    }
 }

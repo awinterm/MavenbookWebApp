@@ -28,4 +28,8 @@ public abstract void openConnection(String driverClass, String url,
     public void deleteOneRecord(String tableName, String id) throws ClassNotFoundException, SQLException;
     
     public void addOneRecord(String tableName, ArrayList<String> record ) throws SQLException;
+    public int deleteById(String tableName, String pkColName, Object Value) throws SQLException;
+     public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
+                             String pkColumnName, Object value )
+                             throws SQLException, Exception;
 }

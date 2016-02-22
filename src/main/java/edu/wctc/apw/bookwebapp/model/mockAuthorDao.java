@@ -5,6 +5,7 @@
  */
 package edu.wctc.apw.bookwebapp.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,7 +41,10 @@ public class mockAuthorDao implements AuthorDaoStrategy {
 
         return authorList;
     }
-    
+    @Override
+    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException{
+      return 1;  
+    }
     // test
 //     public static void main(String[] args) {
 //         AuthorService aServ = new AuthorService();
