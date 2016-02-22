@@ -6,6 +6,7 @@
 package edu.wctc.apw.bookwebapp.model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,4 +17,8 @@ public interface AuthorDaoStrategy {
 
     List<Author> getAuthorList() throws ClassNotFoundException, SQLException;
     public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException;
+    public int createNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException, ClassNotFoundException;
+    public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
+                             String pkColumnName, Object value )
+                             throws SQLException, Exception;
 }

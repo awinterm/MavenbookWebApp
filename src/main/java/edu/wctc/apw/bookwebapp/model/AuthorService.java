@@ -6,6 +6,7 @@
 package edu.wctc.apw.bookwebapp.model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,4 +29,9 @@ public class AuthorService {
     public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException{
         return dao.deleteAuthorById(id);
     }
+    
+     public int CreateNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException, ClassNotFoundException {
+         return dao.createNewRecordInTable(tableName, record);        
+     }
+     
 }

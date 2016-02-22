@@ -149,7 +149,7 @@ public class MySqlDBStrategy implements DBStrategy {
     
     
     @Override
-    public void CreateNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException{
+    public int createNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException{
         
    //     String sql = "INSERT INTO table_name (column1,column2,column3,...)\n" +
    //                  "VALUES (value1,value2,value3,...);";
@@ -198,7 +198,7 @@ public class MySqlDBStrategy implements DBStrategy {
     //    System.out.println(columnName);
     //    System.out.println(pstmt);
         
-        pstmt.executeUpdate();
+        return pstmt.executeUpdate();
         
 //test
 //        rs = stmt.executeQuery(sql1);

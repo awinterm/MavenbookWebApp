@@ -27,7 +27,7 @@ public interface DBStrategy {
 
     public void deleteOneRecord(String tableName, String id) throws ClassNotFoundException, SQLException;
 
-    public void CreateNewRecordInTable(String tableName, ArrayList<String> record) throws SQLException;
+    public int createNewRecordInTable(String tableName, ArrayList<String> record) throws SQLException;
 
     public int deleteById(String tableName, String pkColName, Object Value) throws SQLException;
 

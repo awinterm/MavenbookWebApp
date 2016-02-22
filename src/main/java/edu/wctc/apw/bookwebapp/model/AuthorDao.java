@@ -64,6 +64,28 @@ public class AuthorDao implements AuthorDaoStrategy {
         return result;
     }
     
+  
+    
+    @Override
+    public int createNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException, ClassNotFoundException {
+        db.openConnection(DRIVER, URL, USER, PASSWORD);
+        int result = db.createNewRecordInTable(tableName, record);
+        db.closeConnection();
+        return result;
+    }
+    
+    @Override
+       public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
+                             String pkColumnName, Object value )
+                             throws SQLException, Exception{
+           db.openConnection(DRIVER, URL, USER, PASSWORD);
+           int result = db.updateRecords(tableName, colNames, colValues, pkColumnName, value);
+           db.closeConnection();
+           return result;
+           
+       }
+    
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         AuthorDaoStrategy dao = new AuthorDao();
         List<Author> authors = dao.getAuthorList();
