@@ -21,4 +21,6 @@ public interface AuthorDaoStrategy {
     public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
                              String pkColumnName, Object value )
                              throws SQLException, Exception;
+     public DBStrategy getDb();
+     public void setDb(DBStrategy db);
 }

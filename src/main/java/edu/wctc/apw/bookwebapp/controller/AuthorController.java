@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.model.Author;
 import edu.wctc.apw.bookwebapp.model.AuthorService;
+import javax.inject.Inject;
 
 /**
  *
@@ -24,6 +25,13 @@ import edu.wctc.apw.bookwebapp.model.AuthorService;
 @WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
 public class AuthorController extends HttpServlet {
      private final String RESPONSE_PAGE = "/ResponsePage.jsp";
+     // WAY MORE CONSTANTS GO HERE! 
+     
+     
+     
+     @Inject
+     private AuthorService authorServ;
+     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,7 +46,7 @@ public class AuthorController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try{
             
-            AuthorService authorServ = new AuthorService();
+//            AuthorService authorServ = new AuthorService();
             List<Author> authors;
             authors = authorServ.getAuthorList();
             request.setAttribute("authorList", authors);

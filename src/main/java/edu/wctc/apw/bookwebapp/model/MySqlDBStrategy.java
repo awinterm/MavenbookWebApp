@@ -6,6 +6,7 @@
 package edu.wctc.apw.bookwebapp.model;
 
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -21,13 +22,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.context.SessionScoped;
 
 /**
  *
  * @author andre_000
  */
-public class MySqlDBStrategy implements DBStrategy {
+@SessionScoped
+public class MySqlDBStrategy implements DBStrategy, Serializable {
     private Connection conn;
+
+    public MySqlDBStrategy() {
+    }
+    
     
     
     @Override
