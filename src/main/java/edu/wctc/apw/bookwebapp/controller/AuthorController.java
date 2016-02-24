@@ -24,12 +24,16 @@ import javax.inject.Inject;
  */
 @WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
 public class AuthorController extends HttpServlet {
-     private final String RESPONSE_PAGE = "/ResponsePage.jsp";
+     private static final String RESPONSE_PAGE = "/ResponsePage.jsp";
+     private static final String ACTION_PARAMETER = "action";
+     private static final String GET_AUTHOR_LIST_ACTION = "getList";
+     private static final String NO_PARAMETER_MSG = "No matching parameter found";
+     private static final String ADD_EDIT_DELETE_ACTION = "addEditDelete";
      // WAY MORE CONSTANTS GO HERE! 
      
      
      
-     @Inject
+    @Inject
      private AuthorService authorServ;
      
     /**
@@ -44,24 +48,53 @@ public class AuthorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try{
-            
-//            AuthorService authorServ = new AuthorService();
-            List<Author> authors;
-            authors = authorServ.getAuthorList();
-            request.setAttribute("authorList", authors);
-            
-          
-            
-        } catch(Exception e) {
-            request.setAttribute("errorMsg", e.getMessage());
-        }
         
-        RequestDispatcher view =
-                    request.getRequestDispatcher(RESPONSE_PAGE);
-            view.forward(request, response);
+        String destination = RESPONSE_PAGE;
+        String action = request.getParameter(ACTION_PARAMETER);
+        
+        
+        try{
+        switch (action) {
+                case GET_AUTHOR_LIST_ACTION:
+                        // Jim made a method out of this. If I reuse these two lines I will do the same.
+                        List<Author> authors = authorServ.getAuthorList();
+                        request.setAttribute("authorList", authors);
+                        // if you have two or more pages this tool can send to then this next line is smart.
+                        destination = RESPONSE_PAGE;
+                    break;
 
+                    // MORE CASE STATMENTS TO MATCH THE UI... BUILD THAT THEN THIS I THINK
+
+                default:
+                    // no param identified in request, must be an error
+                    request.setAttribute("errMsg", NO_PARAMETER_MSG);
+                    destination = RESPONSE_PAGE;
+                    break;
+            }
+
+        } catch (Exception e) {
+            request.setAttribute("errMsg", e.getCause().getMessage());
+        }
+              
+//        try{
+//            
+////            AuthorService authorServ = new AuthorService();
+//            List<Author> authors;
+//            authors = authorServ.getAuthorList();
+//            request.setAttribute("authorList", authors);
+//            
+//          
+//            
+//        } catch(Exception e) {
+//            request.setAttribute("errorMsg", e.getMessage());
+//        }
+//        
+        RequestDispatcher view =
+                    request.getRequestDispatcher(destination);
+           view.forward(request, response);
     }
+//
+//    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -103,3 +136,5 @@ public class AuthorController extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

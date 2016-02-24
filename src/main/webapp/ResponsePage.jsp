@@ -81,12 +81,15 @@
             </div>
                  
         </nav>
-        
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-                <script>
-            $('.table > tbody > tr').click(function() {
+              <script>
+                $( document ).ready(function() {
+                         $('.table > tbody > tr').click(function() {
                 alert("Your book is overdue.");
                 });
-        </script>
+                });
+               
+              </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+            
     </body>
 </html>
