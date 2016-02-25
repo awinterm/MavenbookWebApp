@@ -31,7 +31,10 @@ public class AuthorController extends HttpServlet {
      private static final String ADD_EDIT_DELETE_ACTION = "addEditDelete";
      // WAY MORE CONSTANTS GO HERE! 
      
-     
+    private String driverClass;
+    private String url;
+    private String userName;
+    private String password;
      
     @Inject
      private AuthorService authorServ;
@@ -52,6 +55,7 @@ public class AuthorController extends HttpServlet {
         String destination = RESPONSE_PAGE;
         String action = request.getParameter(ACTION_PARAMETER);
         
+        configDbConnection();
         
         try{
         switch (action) {
@@ -93,6 +97,12 @@ public class AuthorController extends HttpServlet {
                     request.getRequestDispatcher(destination);
            view.forward(request, response);
     }
+    
+    private void configDbConnection() { 
+        authorServ.getDao().initDao(driverClass, url, userName, password);   
+    }
+    
+    
 //
 //    }
 
@@ -135,6 +145,15 @@ public class AuthorController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    @Override
+    public void init() throws ServletException {
+        driverClass = getServletContext().getInitParameter("db.driver.class");
+        url = getServletContext().getInitParameter("db.url");
+        userName = getServletContext().getInitParameter("db.username");
+        password = getServletContext().getInitParameter("db.password");
+    }
+    
+    
 }
 
 

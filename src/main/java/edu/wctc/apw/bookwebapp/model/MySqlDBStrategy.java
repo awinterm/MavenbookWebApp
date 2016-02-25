@@ -22,13 +22,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.SessionScoped;
 
 /**
  *
  * @author andre_000
  */
-@SessionScoped
+@Dependent
 public class MySqlDBStrategy implements DBStrategy, Serializable {
     private Connection conn;
 
