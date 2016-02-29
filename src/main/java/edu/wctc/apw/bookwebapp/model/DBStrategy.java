@@ -37,4 +37,6 @@ public interface DBStrategy {
     
     public void insertNewRecordbyId (String tableName, ArrayList<String> record, int id ) throws SQLException;
     
+    public Map<String, Object> findById(String tableName, String primaryKeyFieldName,
+            Object primaryKeyValue);
 }

@@ -102,6 +102,43 @@ public class MySqlDBStrategy implements DBStrategy, Serializable {
         return records;
     }
     
+    @Override
+    public final Map<String, Object> findById(String tableName, String primaryKey,
+            Object primaryKeyValue) {
+
+        String sql = "SELECT * FROM " + tableName + " WHERE " + primaryKey + " = ?";
+        PreparedStatement stmt = null;
+        final Map<String, Object> record = new HashMap();
+
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setObject(1, primaryKeyValue);
+            ResultSet rs = stmt.executeQuery();
+            final ResultSetMetaData metaData = rs.getMetaData();
+            final int fields = metaData.getColumnCount();
+
+            // Retrieve the raw data from the ResultSet and copy the values into a Map
+            // with the keys being the column names of the table.
+            if (rs.next()) {
+                for (int i = 1; i <= fields; i++) {
+                    record.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+            }
+            
+        } catch (SQLException e) {
+            //  something here!!! Jim threw a custom exception.
+        } finally {
+            try {
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+             //      something here!!! Jim threw a custom Exception
+            } // end try
+        } // end finally
+
+        return record;
+    }
+    
     
     @Override
     public void deleteOneRecord(String tableName, String id) throws ClassNotFoundException, SQLException {

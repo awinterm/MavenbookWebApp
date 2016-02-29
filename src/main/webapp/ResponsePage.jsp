@@ -15,81 +15,140 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Book Inventory</title>
         <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a href="#" class="navbar-brand">Author Inventory</a>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-menu">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand">Author Inventory</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-menu">
+                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="collapse-menu">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="index.html">Home</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="collapse navbar-collapse" id="collapse-menu">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="index.html">Home</a></li>
-                </ul>
-           </div>
-        </div>
-    </nav>
+        </nav>
         <div class="container">
-        <div class="row">
-        <div class="col-md-8">
-        <h1>Author Inventory</h1>
-        
-        <table class="table table-hover active">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Author Name</th>
-                    <th>Date Added</th>
-                </tr>
-            </thead>
-            
-           
-            <tbody>
-            
-                    <c:forEach var="author" items="${authorList}">
-                                 <tr>
-                                    <td>
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Author Inventory</h1>
+
+                    <table class="table table-hover active">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Author Name</th>
+                                <th>Date Added</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            <c:forEach var="author" items="${authorList}">
+                                <tr>
+                                    <td id=${author.authorId}>
                                         <c:out value="${author.authorId}" />
                                     </td>
-                                    <td>
+                                    <td class="authorname" id="<c:out value="${author.authorName}"/>" >
                                         <c:out value="${author.authorName}"/>
                                     </td>
-                                    <td>
+                                    <td id=${author.dateAdded}>
                                         <c:out value="${author.dateAdded}"/>
                                     </td>
                                 </tr>
-                    </c:forEach>  
-           </tbody>
-            
-        </table>
-        <h1>${errorMsg}</h1>
+                            </c:forEach>  
+                        </tbody>
+
+                    </table>
+                    <h1>${errorMsg}</h1>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-        
+
+
+
         <nav class="navbar	navbar-inverse	navbar-fixed-bottom">
-            
+
             <div class="container">
+                <div class="container">
+                    <div class="row">
+                        <div id="add" class="col-md-8">
+
+
+                            <form method="POST" action="AuthorController">
+                                <h2 class="toolbar" >Add a new Author</h2>
+                                <label>Enter Name</label>
+                                <input type="text" name="name" value=""/>
+                                
+                                <input type="submit" name="action" value="ADD" />
+                            </form>
+
+                        </div>
+                        <div id="editDelete" class="col-md-8">
+
+                            <form method="POST" action="AreaCalculator" name="Triangle" id="triangle" class="calcBox">
+                                <h2>Edit or Delete?</h2>
+                                <label>Name:</label>
+                                <input id="name" type="text" name="height" value=""/>
+                                <br>
+                                <label>Date Added:</label>
+                                <input id="date" type="text" name="base" value=""/>
+                                <br>
+                                <input type="submit" name="submit" value="Submit"/>
+                                <input type="hidden" name="shapeID" value="TRIANGLE" />
+                            </form>
+                        </div>
+
+                        <div class="col-md-4">
+                            <form method="POST" action="AreaCalculator" name="Circle" id="circle" class="calcBox">
+                                <h2>Circle Calculator</h2>
+                                <label>Enter Radius</label>
+                                <input type="text" name="radius" value=""/>
+                                <br>
+                                <br>
+                                <input type="submit" name="submit" value="Submit"/>
+                                <input type="hidden" name="shapeID" value="CIRCLE" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <p class="navbar-text"><i>&copy; 2016 Andrew Wintermyer</i></p>  
             </div>
-                 
+
         </nav>
-              <script>
-                $( document ).ready(function() {
-                         $('.table > tbody > tr').click(function() {
-                alert("Your book is overdue.");
-                });
-                });
-               
-              </script>
+
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-            
+        <script>
+            $(document).ready(function () {
+                var name;
+                $('#editDelete').hide();
+                
+                 $('.authorname').click(function () {
+                        name = $(this).attr('id'); 
+                    });
+                
+                $('.table > tbody > tr').click(function () {
+                   
+                    
+                    $('#editDelete').show();
+                    $('#add').hide();
+                    $('#name').val(name);
+                    $('#date').val("Today");
+                });
+            });
+
+        </script>
+
+
     </body>
 </html>

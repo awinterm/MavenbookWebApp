@@ -8,6 +8,7 @@ package edu.wctc.apw.bookwebapp.model;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +44,6 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
    public List<Author> getAuthorList() throws ClassNotFoundException, SQLException{
        db.openConnection(driver, url, user, password);
        
-       
-       
-       
-       
        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
        List<Author> authors = new ArrayList<>();
        
@@ -74,12 +71,39 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
         return result;
     }
     
-  
+    // jims method
+//     @Override
+//    public boolean saveAuthor(Integer authorId, String authorName) throws DataAccessException {
+//        db.openConnection(driver, url, user, pwd);
+//        boolean result = false;
+//        
+//        if(authorId == null || authorId.equals(0)) {
+//            // must be a new record
+//            result = db.insertRecord("author", Arrays.asList("author_name","date_added"), 
+//                                      Arrays.asList(authorName,new Date()));
+//        } else {
+//            // must be an update of an existing record
+//            int recsUpdated = db.updateRecords("author", Arrays.asList("author_name"), 
+//                                       Arrays.asList(authorName),
+//                                       "author_id", authorId);
+//            if(recsUpdated > 0) {
+//                result = true;
+//            }
+//        }
+//        return result;
+//    }
     
+    // BAD DREW 
     @Override
-    public int createNewRecordInTable(String tableName, ArrayList<String> record ) throws SQLException, ClassNotFoundException {
+    public int createNewRecordInTable(String authorName) throws SQLException, ClassNotFoundException {
+        
+        ArrayList<String> record = new ArrayList<>();
+        record.add(null);
+        record.add(authorName);
+        record.add(new Date().toString());
+       
         db.openConnection(driver, url, user, password);
-        int result = db.createNewRecordInTable(tableName, record);
+        int result = db.createNewRecordInTable("author", record);
         db.closeConnection();
         return result;
     }
@@ -95,6 +119,21 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
            
        }
     
+   @Override  
+    public Author getAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
+        
+        db.openConnection(driver, url, user, password);
+        
+        Map<String,Object> rawRec = db.findById("author", "author_id", authorId);
+        Author author = new Author();
+        author.setAuthorId((Integer)rawRec.get("author_id"));
+        author.setAuthorName(rawRec.get("author_name").toString());
+        author.setDateAdded((Date)rawRec.get("date_added"));
+        
+        return author;
+    }   
+       
+       
     
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         AuthorDaoStrategy dao = new AuthorDao();

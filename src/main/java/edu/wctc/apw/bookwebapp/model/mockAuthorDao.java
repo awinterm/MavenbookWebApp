@@ -60,7 +60,7 @@ public class mockAuthorDao implements AuthorDaoStrategy, Serializable {
 //     }
 
     @Override
-    public int createNewRecordInTable(String tableName, ArrayList<String> record) throws SQLException, ClassNotFoundException {
+    public int createNewRecordInTable(String authorName) throws SQLException, ClassNotFoundException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -121,6 +121,13 @@ public class mockAuthorDao implements AuthorDaoStrategy, Serializable {
 
     @Override
     public String getDriver() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
+
+    @Override
+    public Author getAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -29,7 +29,11 @@ public class AuthorController extends HttpServlet {
      private static final String GET_AUTHOR_LIST_ACTION = "getList";
      private static final String NO_PARAMETER_MSG = "No matching parameter found";
      private static final String ADD_EDIT_DELETE_ACTION = "addEditDelete";
-     // WAY MORE CONSTANTS GO HERE! 
+     private static final String SUBMIT_ACTION = "submit";
+     private static final String ADD_EDIT_ACTION = "addEdit";
+     private static final String ADD_EDIT_PAGE ="a web page";
+     private static final String ADD = "ADD";
+// WAY MORE CONSTANTS GO HERE! 
      
     private String driverClass;
     private String url;
@@ -58,16 +62,59 @@ public class AuthorController extends HttpServlet {
         configDbConnection();
         
         try{
+            List<Author> authors;
+            
         switch (action) {
                 case GET_AUTHOR_LIST_ACTION:
                         // Jim made a method out of this. If I reuse these two lines I will do the same.
-                        List<Author> authors = authorServ.getAuthorList();
+                        authors = authorServ.getAuthorList();
                         request.setAttribute("authorList", authors);
                         // if you have two or more pages this tool can send to then this next line is smart.
                         destination = RESPONSE_PAGE;
                     break;
 
-                    // MORE CASE STATMENTS TO MATCH THE UI... BUILD THAT THEN THIS I THINK
+                case ADD:
+                    String authorName = request.getParameter("name");
+                    authorServ.createNewRecordInTable(authorName);
+                    
+//                    authors = authorServ.getAuthorList();
+//                    request.setAttribute("authorList", authors);
+//                    destination = RESPONSE_PAGE;
+                    break;
+                    
+//                case ADD_EDIT_DELETE_ACTION:
+//                    String subAction = request.getParameter(SUBMIT_ACTION);
+//
+//                    if (subAction.equals(ADD_EDIT_ACTION)) {
+//                        // must be add or edit, go to addEdit page
+//                        String[] authorIds = request.getParameterValues("authorId");
+//                        if (authorIds == null) {
+//                            // must be an add action, nothing to do but
+//                            // go to edit page
+//                        } else {
+//                            // must be an edit action, need to get data
+//                            // for edit and then forward to edit page
+//                            
+//                            // Only process first row selected
+//                            String authorId = authorIds[0];
+//                            Author author = authorServ.getAuthorById(authorId);
+//                            request.setAttribute("author", author);
+//                        }
+//
+//                        destination = ADD_EDIT_PAGE;
+//
+//                    } else {
+//                        // must be DELETE
+//                        // get array based on records checked
+//                        String[] authorIds = request.getParameterValues("authorId");
+//                        for (String id : authorIds) {
+//                            authorServ.deleteAuthorById(id);
+//                        }
+//
+//                        this.refreshList(request, authorServ);
+//                        destination = RESPONSE_PAGE;
+//                    }
+//                    break;
 
                 default:
                     // no param identified in request, must be an error
@@ -77,7 +124,7 @@ public class AuthorController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            request.setAttribute("errMsg", e.getCause().getMessage());
+            request.setAttribute("errMsg", "Something Bad");
         }
               
 //        try{
@@ -151,6 +198,11 @@ public class AuthorController extends HttpServlet {
         url = getServletContext().getInitParameter("db.url");
         userName = getServletContext().getInitParameter("db.username");
         password = getServletContext().getInitParameter("db.password");
+    }
+    
+     private void refreshList(HttpServletRequest request, AuthorService authorService) throws Exception {
+        List<Author> authors = authorService.getAuthorList();
+        request.setAttribute("authorList", authors);
     }
     
     
