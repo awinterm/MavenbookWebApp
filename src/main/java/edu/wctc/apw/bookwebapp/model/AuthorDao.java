@@ -7,6 +7,8 @@ package edu.wctc.apw.bookwebapp.model;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -100,8 +102,11 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
         ArrayList<String> record = new ArrayList<>();
         record.add(null);
         record.add(authorName);
-        record.add(new Date().toString());
-       
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        
+        record.add(df.format(date));
+        
         db.openConnection(driver, url, user, password);
         int result = db.createNewRecordInTable("author", record);
         db.closeConnection();

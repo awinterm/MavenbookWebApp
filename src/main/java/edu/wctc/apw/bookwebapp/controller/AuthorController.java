@@ -32,7 +32,7 @@ public class AuthorController extends HttpServlet {
      private static final String SUBMIT_ACTION = "submit";
      private static final String ADD_EDIT_ACTION = "addEdit";
      private static final String ADD_EDIT_PAGE ="a web page";
-     private static final String ADD = "ADD";
+     private static final String ADD = "add";
 // WAY MORE CONSTANTS GO HERE! 
      
     private String driverClass;
@@ -76,10 +76,10 @@ public class AuthorController extends HttpServlet {
                 case ADD:
                     String authorName = request.getParameter("name");
                     authorServ.createNewRecordInTable(authorName);
-                    
-//                    authors = authorServ.getAuthorList();
-//                    request.setAttribute("authorList", authors);
-//                    destination = RESPONSE_PAGE;
+                   
+                    authors = authorServ.getAuthorList();
+                    request.setAttribute("authorList", authors);
+                    destination = RESPONSE_PAGE;
                     break;
                     
 //                case ADD_EDIT_DELETE_ACTION:

@@ -89,8 +89,8 @@
                                 <h2 class="toolbar" >Add a new Author</h2>
                                 <label>Enter Name</label>
                                 <input type="text" name="name" value=""/>
-                                
-                                <input type="submit" name="action" value="ADD" />
+                                <input type="hidden" name="action" value="add" />
+                                <input type="submit" name="submit" value="add" />
                             </form>
 
                         </div>

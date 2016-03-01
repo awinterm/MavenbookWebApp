@@ -241,7 +241,7 @@ public class MySqlDBStrategy implements DBStrategy, Serializable {
             pstmt.setString(i, record.get(i - 1));
        }
     //    System.out.println(columnName);
-    //    System.out.println(pstmt);
+        System.out.println(pstmt);
         
         return pstmt.executeUpdate();
         
@@ -390,10 +390,10 @@ public class MySqlDBStrategy implements DBStrategy, Serializable {
 //        System.out.println(db.findAllRecords("author", 0).toString());
         ArrayList<String> record = new ArrayList<>();
         record.add(null);
-        record.add("Jack Kerouac");
-        record.add("2015-11-01");
+        record.add("Hunter S Thompson");
+        record.add("1111-11-11");
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
-        db.insertNewRecordbyId("author", record, 3); 
+        db.createNewRecordInTable("author", record); 
         db.closeConnection();
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
         List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
