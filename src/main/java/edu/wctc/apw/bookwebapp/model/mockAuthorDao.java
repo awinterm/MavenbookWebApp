@@ -64,10 +64,7 @@ public class mockAuthorDao implements AuthorDaoStrategy, Serializable {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public int updateRecords(String tableName, List<String> colNames, List<Object> colValues, String pkColumnName, Object value) throws SQLException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public DBStrategy getDb() {
@@ -128,6 +125,11 @@ public class mockAuthorDao implements AuthorDaoStrategy, Serializable {
 
     @Override
     public Author getAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean updateRecords(Integer authorId, String authorName) throws SQLException, Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

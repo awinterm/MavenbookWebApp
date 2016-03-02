@@ -14,9 +14,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Book Inventory</title>
+        <link href="bookCss.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link href="bookCss.css" rel="stylesheet" type="text/css"/>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </head>
     <body>
@@ -38,7 +39,7 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container" id="pageWrapper">
             <div class="row">
                 <h1>Author Inventory</h1>
                 <div class="col-md-8 ScrollStyle">
@@ -79,7 +80,7 @@
 
 
 
-        <nav class="navbar navbar-inverse navbar-fixed-bottom">
+        <nav  class="footer footer-inverse footer-fixed-bottom" >
 
             <div class="container">
                 <div class="container">
@@ -92,7 +93,7 @@
                                 <label>Enter Name</label>
                                 <input type="text" name="name" value="" id="nameInput"/>
                                 <input type="hidden" name="action" value="add" />
-                                <input type="submit" name="submit" value="add" id="addButton" />
+                                <input class="btn" color="black" type="submit" name="submit" value="add" id="addButton" />
                             </form>
 
                         </div>
@@ -100,6 +101,9 @@
 
                             <form method="POST" action="AuthorController" >
                                 <h2>Edit or Delete?</h2>
+                                
+                                
+                     
                                 <input id="id" color="black" type="hidden" name="id" value=""/>
                                 <label>Name:</label>
                                 
@@ -111,27 +115,15 @@
                                 <input type="hidden" name="action" value="editDelete" />
                                 <input type="submit" class="btn" color="black" value="edit" name="submit" />
                                 <input type="submit" class="btn" color="black" value="delete" name="submit" />
-                                <input class="btn" color="black" type="submit" id="cancel" value="cancel" name="cancel" />
+                                <input class="btn" color="black" type="submit" id="cancel" value="cancel" name="submit" />
                             </form>
-                             
-                        </div>
-
-                        <div class="col-md-4">
-                            <form method="POST" action="AreaCalculator" name="Circle" id="circle" class="calcBox">
-                                <h2>Circle Calculator</h2>
-                                <label>Enter Radius</label>
-                                <input type="text" name="radius" value=""/>
-                                <br>
-                                <br>
-                                <input type="submit" name="submit" value="Submit"/>
-                                <input type="hidden" name="shapeID" value="CIRCLE" />
-                            </form>
-                        </div>
-                    </div>
+                         </div>  
+                        
+                    
                 </div>
-                <p class="navbar-text"><i>&copy; 2016 Andrew Wintermyer</i></p>  
+                
             </div>
-
+            </div>
         </nav>
 
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -141,7 +133,7 @@
                 var id;
                 var date;
                 $('#editDelete').hide();
-                
+                $('#cancelDiv').hide();
                  
                 
                 $('.table > tbody > tr').click(function () {
@@ -149,16 +141,14 @@
                     name = $(this).attr('name');
                     id = $(this).attr('id'); 
                     $('#editDelete').show();
+                    $('#cancelDiv').show();
                     $('#add').hide();
                     $('#id').val(id);
                     $('#name').val(name);
                     $('#date').val(date);
                 });
                 
-            $('#cancel').click(function(){
-                 $('#editDelete').hide();
-                 $('#add').show();
-            });
+            
                 
                 
                 

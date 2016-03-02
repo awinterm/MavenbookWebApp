@@ -8,8 +8,15 @@ and open the template in the editor.
     Author     : andre_000
 */
 
-.navbar {
-   color: ghostwhite;
+.footer {
+   color: white;
+   background-color: black;
+   height: 175px;
+   
+}
+
+#cancelDiv{
+    padding-top: 5px;
 }
 
 .btn{
@@ -30,7 +37,14 @@ and open the template in the editor.
 
 .ScrollStyle
 {
+    margin-bottom: 20px;
     overflow: visible;
     max-height: 400px;
     overflow-y: scroll;
 }
+
+body{
+    margin-bottom: 175px;
+    overflow: auto;
+}
+

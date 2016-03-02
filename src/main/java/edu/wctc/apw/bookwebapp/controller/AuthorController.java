@@ -87,11 +87,13 @@ public class AuthorController extends HttpServlet {
                          String authorId = request.getParameter("id");
                          authorServ.deleteAuthorById(authorId);
                          
-                    } else if ((subAction.equals(EDIT_ACTION))){
+                    } else if((subAction.equals(EDIT_ACTION))){
                         String name = request.getParameter("name");
                         String authorId = request.getParameter("id");
                         String date = request.getParameter("date");
-                        authorServ.editAuthorRecord(authorId, name);
+                        authorServ.editAuthorRecord(authorId, name);       
+                    } else {
+                        // must be cancel do nothing
                         
                     }
                     destination = RESPONSE_PAGE;
