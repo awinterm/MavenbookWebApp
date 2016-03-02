@@ -16,6 +16,7 @@
         <title>Book Inventory</title>
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link href="bookCss.css" rel="stylesheet" type="text/css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </head>
     <body>
@@ -39,8 +40,9 @@
         </nav>
         <div class="container">
             <div class="row">
-                <div class="col-md-8">
-                    <h1>Author Inventory</h1>
+                <h1>Author Inventory</h1>
+                <div class="col-md-8 ScrollStyle">
+                    
 
                     <table class="table table-hover active">
                         <thead>
@@ -55,14 +57,14 @@
                         <tbody>
 
                             <c:forEach var="author" items="${authorList}">
-                                <tr>
-                                    <td id=${author.authorId}>
+                                <tr class="${author.dateAdded}" name="${author.authorName}" id=${author.authorId} >
+                                    <td>
                                         <c:out value="${author.authorId}" />
                                     </td>
-                                    <td class="authorname" id="<c:out value="${author.authorName}"/>" >
+                                    <td>
                                         <c:out value="${author.authorName}"/>
                                     </td>
-                                    <td id=${author.dateAdded}>
+                                    <td>            
                                         <c:out value="${author.dateAdded}"/>
                                     </td>
                                 </tr>
@@ -77,7 +79,7 @@
 
 
 
-        <nav class="navbar	navbar-inverse	navbar-fixed-bottom">
+        <nav class="navbar navbar-inverse navbar-fixed-bottom">
 
             <div class="container">
                 <div class="container">
@@ -86,11 +88,11 @@
 
 
                             <form method="POST" action="AuthorController">
-                                <h2 class="toolbar" >Add a new Author</h2>
+                                <h2>Add a new Author</h2>
                                 <label>Enter Name</label>
-                                <input type="text" name="name" value=""/>
+                                <input type="text" name="name" value="" id="nameInput"/>
                                 <input type="hidden" name="action" value="add" />
-                                <input type="submit" name="submit" value="add" />
+                                <input type="submit" name="submit" value="add" id="addButton" />
                             </form>
 
                         </div>
@@ -99,6 +101,7 @@
                             <form method="POST" action="AreaCalculator" name="Triangle" id="triangle" class="calcBox">
                                 <h2>Edit or Delete?</h2>
                                 <label>Name:</label>
+                                <input id="id" type="hidden" name="id" value=""/>
                                 <input id="name" type="text" name="height" value=""/>
                                 <br>
                                 <label>Date Added:</label>
@@ -131,20 +134,27 @@
         <script>
             $(document).ready(function () {
                 var name;
+                var id;
+                var date;
                 $('#editDelete').hide();
                 
-                 $('.authorname').click(function () {
-                        name = $(this).attr('id'); 
-                    });
+                 
                 
                 $('.table > tbody > tr').click(function () {
-                   
-                    
+                    date = $(this).attr('class');
+                    name = $(this).attr('name');
+                    id = $(this).attr('id'); 
                     $('#editDelete').show();
                     $('#add').hide();
+                    $('#id').val(id);
                     $('#name').val(name);
-                    $('#date').val("Today");
+                    $('#date').val(date);
                 });
+                
+            
+                
+                
+                
             });
 
         </script>

@@ -98,6 +98,7 @@ public class MySqlDBStrategy implements DBStrategy, Serializable {
                 // put our map into our list of maps.
                 records.add(record);
         }
+        System.out.println("IM GETTING THEM!");
                 // return this list of maps
         return records;
     }

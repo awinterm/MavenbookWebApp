@@ -9,10 +9,28 @@ and open the template in the editor.
 */
 
 .navbar {
-   background-color: darkolivegreen;
    color: ghostwhite;
 }
 
 .toolbar {
     color: white;
+}
+
+#nameInput {
+    color: black;
+}
+
+#name {
+    color: black;
+}
+
+#date {
+    color: black;
+}
+
+.ScrollStyle
+{
+    overflow: visible;
+    max-height: 400px;
+    overflow-y: scroll;
 }

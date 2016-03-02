@@ -47,6 +47,7 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
        db.openConnection(driver, url, user, password);
        
        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
+        System.out.println(rawData.toString());
        List<Author> authors = new ArrayList<>();
        
        for(Map record : rawData){
@@ -60,7 +61,7 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
            authors.add(author);
        }
        
-       
+       System.out.println(" I WORK!");
        db.closeConnection();
        return authors;
    }
@@ -98,7 +99,10 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
     // BAD DREW 
     @Override
     public int createNewRecordInTable(String authorName) throws SQLException, ClassNotFoundException {
-        
+        if( authorName.isEmpty() || authorName == null){
+            // catch this bad boy... if nulls get in your data base your getauthorList methods DO NOT WORK!
+            throw new IllegalArgumentException();
+        }
         ArrayList<String> record = new ArrayList<>();
         record.add(null);
         record.add(authorName);
