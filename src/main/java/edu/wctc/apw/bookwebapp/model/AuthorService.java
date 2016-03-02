@@ -54,4 +54,10 @@ public class AuthorService implements Serializable {
          return dao.createNewRecordInTable(authorName);        
      }
      
+     public boolean editAuthorRecord(String authorId, String authorName) throws Exception{
+         
+         return dao.updateRecords(Integer.valueOf(authorId), authorName);
+     }
+     
+   
 }

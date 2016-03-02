@@ -98,18 +98,22 @@
                         </div>
                         <div id="editDelete" class="col-md-8">
 
-                            <form method="POST" action="AreaCalculator" name="Triangle" id="triangle" class="calcBox">
+                            <form method="POST" action="AuthorController" >
                                 <h2>Edit or Delete?</h2>
+                                <input id="id" color="black" type="hidden" name="id" value=""/>
                                 <label>Name:</label>
-                                <input id="id" type="hidden" name="id" value=""/>
-                                <input id="name" type="text" name="height" value=""/>
+                                
+                                <input id="name" color="black" type="text" name="name" value=""/>
                                 <br>
                                 <label>Date Added:</label>
-                                <input id="date" type="text" name="base" value=""/>
+                                <input id="date" color="black" type="text" name="date" value="" readonly/>
                                 <br>
-                                <input type="submit" name="submit" value="Submit"/>
-                                <input type="hidden" name="shapeID" value="TRIANGLE" />
+                                <input type="hidden" name="action" value="editDelete" />
+                                <input type="submit" class="btn" color="black" value="edit" name="submit" />
+                                <input type="submit" class="btn" color="black" value="delete" name="submit" />
+                                <input class="btn" color="black" type="submit" id="cancel" value="cancel" name="cancel" />
                             </form>
+                             
                         </div>
 
                         <div class="col-md-4">
@@ -151,7 +155,10 @@
                     $('#date').val(date);
                 });
                 
-            
+            $('#cancel').click(function(){
+                 $('#editDelete').hide();
+                 $('#add').show();
+            });
                 
                 
                 

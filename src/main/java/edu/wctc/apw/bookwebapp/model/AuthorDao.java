@@ -118,16 +118,21 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
     }
     
     @Override
-       public int updateRecords(String tableName, List<String> colNames, List<Object> colValues,
-                             String pkColumnName, Object value )
+       public boolean updateRecords( Integer authorId, String authorName )
                              throws SQLException, Exception{
-           db.openConnection(driver, url, user, password);
-           int result = db.updateRecords(tableName, colNames, colValues, pkColumnName, value);
+           boolean result = false;
+           db.openConnection(driver, url, user, password);    
+           int recsUpdated = db.updateRecords("author", Arrays.asList("author_name"), 
+                                       Arrays.asList(authorName),
+                                       "author_id", authorId);
+            if(recsUpdated > 0) {
+                result = true;
+           
+            }
            db.closeConnection();
            return result;
-           
        }
-    
+       
    @Override  
     public Author getAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
         
@@ -207,5 +212,7 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
         this.user = user;
         this.password = password;
     }
+
+    
     
 }
