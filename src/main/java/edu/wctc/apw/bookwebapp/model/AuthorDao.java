@@ -25,7 +25,7 @@ import javax.inject.Inject;
 public class AuthorDao implements AuthorDaoStrategy, Serializable {
     // domain specific so like a list of authors vs a list of Maps 
     //private DBStrategy DBStrategy;
-    
+    private final String ERROR_MSG = "You did something unexpected.";
     
     @Inject
     private DBStrategy db;
@@ -101,7 +101,7 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
     public int createNewRecordInTable(String authorName) throws SQLException, ClassNotFoundException {
         if( authorName.isEmpty() || authorName == null){
             // catch this bad boy... if nulls get in your data base your getauthorList methods DO NOT WORK!
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ERROR_MSG);
         }
         ArrayList<String> record = new ArrayList<>();
         record.add(null);

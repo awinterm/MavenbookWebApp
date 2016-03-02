@@ -107,7 +107,7 @@ public class AuthorController extends HttpServlet {
             }
 
         } catch (Exception e) {
-            request.setAttribute("errMsg", "Something Bad");
+            request.setAttribute("errMsg", e.getMessage());
         }
 
         RequestDispatcher view =

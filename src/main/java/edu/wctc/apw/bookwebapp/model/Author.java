@@ -16,7 +16,7 @@ public class Author {
     private int authorId;
     private String authorName;
     private Date dateAdded;
-    private final String ERROR_MSG = "There is a problem with the DataBase :(";
+    private final String ERROR_MSG = "There is a problem with the DataBase";
     
     public Author() {
     }

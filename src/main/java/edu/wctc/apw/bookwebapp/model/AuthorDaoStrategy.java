@@ -16,6 +16,7 @@ import java.util.List;
 public interface AuthorDaoStrategy {
 
     List<Author> getAuthorList() throws ClassNotFoundException, SQLException;
+    
     public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException;
     public int createNewRecordInTable(String authorName ) throws SQLException, ClassNotFoundException;
    
