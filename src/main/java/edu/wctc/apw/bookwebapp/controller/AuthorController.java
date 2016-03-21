@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.model.Author;
 import edu.wctc.apw.bookwebapp.model.AuthorService;
 import javax.inject.Inject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  *
@@ -40,7 +44,8 @@ public class AuthorController extends HttpServlet {
     private String url;
     private String userName;
     private String password;
-     
+    private String dbJndiName; 
+    
     @Inject
      private AuthorService authorServ;
      
@@ -60,11 +65,11 @@ public class AuthorController extends HttpServlet {
         String destination = RESPONSE_PAGE;
         String action = request.getParameter(ACTION_PARAMETER);
         
-        configDbConnection();
+        
         
         try{
-            List<Author> authors;
             
+            configDbConnection();
         switch (action) {
                 case GET_AUTHOR_LIST_ACTION:
                         // Jim made a method out of this. If I reuse these two lines I will do the same.
@@ -176,10 +181,28 @@ public class AuthorController extends HttpServlet {
 //           view.forward(request, response);
 //    }
     
-    private void configDbConnection() { 
-        authorServ.getDao().initDao(driverClass, url, userName, password);   
+     private void configDbConnection() throws NamingException, Exception { 
+        if(dbJndiName == null) {
+            authorServ.getDao().initDao(driverClass, url, userName, password);   
+        } else {
+            /*
+             Lookup the JNDI name of the Glassfish connection pool
+             and then use it to create a DataSource object.
+             */
+            Context ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup(dbJndiName);
+            authorServ.getDao().initDao(ds);
+        }
     }
     
+//    
+//    
+//    private void configDbConnection() { 
+//        authorServ.getDao().initDao(driverClass, url, userName, password);  
+//        
+//        
+//    }
+//    
     
 //
 //    }
@@ -225,10 +248,11 @@ public class AuthorController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        driverClass = getServletContext().getInitParameter("db.driver.class");
-        url = getServletContext().getInitParameter("db.url");
-        userName = getServletContext().getInitParameter("db.username");
-        password = getServletContext().getInitParameter("db.password");
+//        driverClass = getServletContext().getInitParameter("db.driver.class");
+//        url = getServletContext().getInitParameter("db.url");
+//        userName = getServletContext().getInitParameter("db.username");
+//        password = getServletContext().getInitParameter("db.password");
+        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
     }
     
      private void refreshList(HttpServletRequest request, AuthorService authorService) throws Exception {

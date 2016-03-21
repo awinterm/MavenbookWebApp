@@ -14,6 +14,7 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 
 import javax.enterprise.inject.Alternative;
+import javax.sql.DataSource;
 
 /**
  *
@@ -130,6 +131,11 @@ public class mockAuthorDao implements AuthorDaoStrategy, Serializable {
 
     @Override
     public boolean updateRecords(Integer authorId, String authorName) throws SQLException, Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void initDao(DataSource ds) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

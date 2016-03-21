@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import javax.sql.DataSource;
 
 /**
  *
@@ -29,22 +30,37 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
     
     @Inject
     private DBStrategy db;
-    
+    private DataSource ds;
     private String driver;
     private String url;
     private String user;
     private String password;
 
+    public DataSource getDs() {
+        return ds;
+    }
+
+    public void setDs(DataSource ds) {
+        this.ds = ds;
+    }
+
     
     
-    
+     @Override
+    public void initDao(DataSource ds) throws Exception {
+        this.ds = ds;
+    }
     
     public AuthorDao(){   
     }
 
     @Override
-   public List<Author> getAuthorList() throws ClassNotFoundException, SQLException{
-       db.openConnection(driver, url, user, password);
+   public List<Author> getAuthorList() throws ClassNotFoundException, SQLException, Exception{
+        if(ds == null) {
+            db.openConnection(driver, url, user, password);
+        } else {
+            db.openConnection(ds);
+        }
        
        List<Map<String, Object>> rawData = db.findAllRecords("author", 0);
         System.out.println(rawData.toString());
@@ -67,8 +83,12 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
    }
     
     @Override
-    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException{
-        db.openConnection(driver, url, user, password);
+    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException, Exception{
+         if(ds == null) {
+            db.openConnection(driver, url, user, password);
+        } else {
+            db.openConnection(ds);
+        }
         int result = db.deleteById("author", "author_id", id);
         db.closeConnection();
         return result;
@@ -98,7 +118,7 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
     
     // BAD DREW 
     @Override
-    public int createNewRecordInTable(String authorName) throws SQLException, ClassNotFoundException {
+    public int createNewRecordInTable(String authorName) throws SQLException, ClassNotFoundException, Exception {
         if( authorName.isEmpty() || authorName == null){
             // catch this bad boy... if nulls get in your data base your getauthorList methods DO NOT WORK!
             throw new IllegalArgumentException(ERROR_MSG);
@@ -111,7 +131,11 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
         
         record.add(df.format(date));
         
-        db.openConnection(driver, url, user, password);
+         if(ds == null) {
+            db.openConnection(driver, url, user, password);
+        } else {
+            db.openConnection(ds);
+        }
         int result = db.createNewRecordInTable("author", record);
         db.closeConnection();
         return result;
@@ -121,7 +145,11 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
        public boolean updateRecords( Integer authorId, String authorName )
                              throws SQLException, Exception{
            boolean result = false;
-           db.openConnection(driver, url, user, password);    
+            if(ds == null) {
+            db.openConnection(driver, url, user, password);
+        } else {
+            db.openConnection(ds);
+        }
            int recsUpdated = db.updateRecords("author", Arrays.asList("author_name"), 
                                        Arrays.asList(authorName),
                                        "author_id", authorId);
@@ -149,7 +177,7 @@ public class AuthorDao implements AuthorDaoStrategy, Serializable {
        
        
     
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException, Exception {
         AuthorDaoStrategy dao = new AuthorDao();
         List<Author> authors = dao.getAuthorList();
         System.out.println(authors);

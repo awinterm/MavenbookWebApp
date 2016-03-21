@@ -8,6 +8,7 @@ package edu.wctc.apw.bookwebapp.model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
 
 /**
  *
@@ -15,10 +16,10 @@ import java.util.List;
  */
 public interface AuthorDaoStrategy {
 
-    List<Author> getAuthorList() throws ClassNotFoundException, SQLException;
+    public List<Author> getAuthorList() throws ClassNotFoundException, SQLException, Exception;
     
-    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException;
-    public int createNewRecordInTable(String authorName ) throws SQLException, ClassNotFoundException;
+    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException, Exception;
+    public int createNewRecordInTable(String authorName ) throws SQLException, ClassNotFoundException, Exception;
    
      public DBStrategy getDb();
      public void setDb(DBStrategy db);
@@ -34,4 +35,7 @@ public interface AuthorDaoStrategy {
      public Author getAuthorById(Integer authorId) throws ClassNotFoundException, SQLException;
      public boolean updateRecords( Integer authorId, String authorName )
                              throws SQLException, Exception;
+     
+     public abstract void initDao(DataSource ds) throws Exception;
+    
 }

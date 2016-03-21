@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.sql.DataSource;
 
 /**
  *
@@ -39,4 +40,6 @@ public interface DBStrategy {
     
     public Map<String, Object> findById(String tableName, String primaryKeyFieldName,
             Object primaryKeyValue);
+    
+    public void openConnection(DataSource ds) throws Exception;
 }
