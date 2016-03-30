@@ -5,6 +5,7 @@
  */
 package edu.wctc.apw.bookwebapp.controller;
 
+import edu.wctc.apw.bookwebapp.ejb.AuthorFacade;
 import java.io.IOException;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.model.Author;
-import edu.wctc.apw.bookwebapp.model.AuthorService;
+
 import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -47,8 +48,8 @@ public class AuthorController extends HttpServlet {
     private String dbJndiName; 
     
     @Inject
-     private AuthorService authorServ;
-     
+     private AuthorFacade authorServ;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -69,19 +70,20 @@ public class AuthorController extends HttpServlet {
         
         try{
             
-            configDbConnection();
+//            configDbConnection();
         switch (action) {
                 case GET_AUTHOR_LIST_ACTION:
                         // Jim made a method out of this. If I reuse these two lines I will do the same.
-                        this.refreshList(request, authorServ);
+                        this.refreshList(request);
                         // if you have two or more pages this tool can send to then this next line is smart.
                         destination = RESPONSE_PAGE;
                     break;
 
                 case ADD:
                     String authorName = request.getParameter("name");
-                    authorServ.createNewRecordInTable(authorName);
-                    this.refreshList(request, authorServ);
+                    // not good to hard code null here but.... Its cool for now.
+                    authorServ.saveOrUpdate(null, authorName);
+                    this.refreshList(request);
                     destination = RESPONSE_PAGE;
                     break;
                     
@@ -90,19 +92,20 @@ public class AuthorController extends HttpServlet {
                     System.out.println(subAction);
                     if (subAction.equals(DELETE_ACTION)) {
                          String authorId = request.getParameter("id");
-                         authorServ.deleteAuthorById(authorId);
+                         authorServ.deleteById(authorId);
+                         
                          
                     } else if((subAction.equals(EDIT_ACTION))){
                         String name = request.getParameter("name");
                         String authorId = request.getParameter("id");
                         String date = request.getParameter("date");
-                        authorServ.editAuthorRecord(authorId, name);       
+                        authorServ.saveOrUpdate(authorId, name);       
                     } else {
                         // must be cancel do nothing
                         
                     }
                     destination = RESPONSE_PAGE;
-                    this.refreshList(request, authorServ);
+                    this.refreshList(request);
                     break;
                     default:
                     // no param identified in request, must be an error
@@ -181,19 +184,19 @@ public class AuthorController extends HttpServlet {
 //           view.forward(request, response);
 //    }
     
-     private void configDbConnection() throws NamingException, Exception { 
-        if(dbJndiName == null) {
-            authorServ.getDao().initDao(driverClass, url, userName, password);   
-        } else {
-            /*
-             Lookup the JNDI name of the Glassfish connection pool
-             and then use it to create a DataSource object.
-             */
-            Context ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup(dbJndiName);
-            authorServ.getDao().initDao(ds);
-        }
-    }
+//     private void configDbConnection() throws NamingException, Exception { 
+//        if(dbJndiName == null) {
+//            authorServ.getDao().initDao(driverClass, url, userName, password);   
+//        } else {
+//            /*
+//             Lookup the JNDI name of the Glassfish connection pool
+//             and then use it to create a DataSource object.
+//             */
+//            Context ctx = new InitialContext();
+//            DataSource ds = (DataSource) ctx.lookup(dbJndiName);
+//            authorServ.getDao().initDao(ds);
+//        }
+//    }
     
 //    
 //    
@@ -246,17 +249,17 @@ public class AuthorController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    @Override
-    public void init() throws ServletException {
-//        driverClass = getServletContext().getInitParameter("db.driver.class");
-//        url = getServletContext().getInitParameter("db.url");
-//        userName = getServletContext().getInitParameter("db.username");
-//        password = getServletContext().getInitParameter("db.password");
-        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
-    }
+//    @Override
+//    public void init() throws ServletException {
+////        driverClass = getServletContext().getInitParameter("db.driver.class");
+////        url = getServletContext().getInitParameter("db.url");
+////        userName = getServletContext().getInitParameter("db.username");
+////        password = getServletContext().getInitParameter("db.password");
+//        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
+//    }
     
-     private void refreshList(HttpServletRequest request, AuthorService authorService) throws Exception {
-        List<Author> authors = authorService.getAuthorList();
+     private void refreshList(HttpServletRequest request) throws Exception {
+        List<Author> authors = authorServ.findAll();
         request.setAttribute("authorList", authors);
     }
     
