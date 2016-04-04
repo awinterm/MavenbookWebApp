@@ -115,6 +115,7 @@
                                 <input type="hidden" name="action" value="editDelete" />
                                 <input type="submit" class="btn" color="black" value="edit" name="submit" />
                                 <input type="submit" class="btn" color="black" value="delete" name="submit" />
+                                <input type="submit" class="btn" color="black" value="books" name="submit" />
                                 <input class="btn" color="black" type="submit" id="cancel" value="cancel" name="submit" />
                             </form>
                          </div>  

@@ -6,6 +6,7 @@
 package edu.wctc.apw.bookwebapp.controller;
 
 import edu.wctc.apw.bookwebapp.ejb.AuthorFacade;
+import edu.wctc.apw.bookwebapp.ejb.BookFacade;
 import java.io.IOException;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.model.Author;
+import edu.wctc.apw.bookwebapp.model.Book;
 
 import javax.inject.Inject;
 import javax.naming.Context;
@@ -30,6 +32,7 @@ import javax.sql.DataSource;
 @WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
 public class AuthorController extends HttpServlet {
      private static final String RESPONSE_PAGE = "/ResponsePage.jsp";
+     private static final String BOOK_PAGE = "/bookListjsp.jsp";
      private static final String ACTION_PARAMETER = "action";
      private static final String GET_AUTHOR_LIST_ACTION = "getList";
      private static final String NO_PARAMETER_MSG = "No matching parameter found";
@@ -49,6 +52,9 @@ public class AuthorController extends HttpServlet {
     
     @Inject
      private AuthorFacade authorServ;
+    
+     @Inject
+     private BookFacade bookServ;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -93,24 +99,35 @@ public class AuthorController extends HttpServlet {
                     if (subAction.equals(DELETE_ACTION)) {
                          String authorId = request.getParameter("id");
                          authorServ.deleteById(authorId);
+                         destination = RESPONSE_PAGE;
                          
                          
                     } else if((subAction.equals(EDIT_ACTION))){
                         String name = request.getParameter("name");
                         String authorId = request.getParameter("id");
                         String date = request.getParameter("date");
-                        authorServ.saveOrUpdate(authorId, name);       
-                    } else {
+                        authorServ.saveOrUpdate(authorId, name); 
+                        destination = RESPONSE_PAGE;
+                    } else if((subAction.equalsIgnoreCase("books"))){
+                        
+                        String authorId = request.getParameter("id");   
+                        refreshBookList(request, authorId);
+                        destination = BOOK_PAGE;
+                        System.out.println("I'M TRYING TO go to " + destination);
+                    }
+                    
+                    
+                    else {
                         // must be cancel do nothing
                         
                     }
-                    destination = RESPONSE_PAGE;
+                    
                     this.refreshList(request);
                     break;
                     default:
                     // no param identified in request, must be an error
                     request.setAttribute("errMsg", NO_PARAMETER_MSG);
-                    destination = RESPONSE_PAGE;
+//                    destination = RESPONSE_PAGE;
                     break;
             }
 
@@ -257,6 +274,13 @@ public class AuthorController extends HttpServlet {
 ////        password = getServletContext().getInitParameter("db.password");
 //        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
 //    }
+    
+    private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
+        int Id = Integer.parseInt(authorId);
+        List<Book> books = bookServ.findByAuthorId(Id);
+        request.setAttribute("bookList", books);
+    }
+    
     
      private void refreshList(HttpServletRequest request) throws Exception {
         List<Author> authors = authorServ.findAll();
