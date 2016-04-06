@@ -5,8 +5,7 @@
  */
 package edu.wctc.apw.bookwebapp.controller;
 
-import edu.wctc.apw.bookwebapp.ejb.AuthorFacade;
-import edu.wctc.apw.bookwebapp.ejb.BookFacade;
+
 import java.io.IOException;
 
 import java.util.List;
@@ -16,14 +15,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import edu.wctc.apw.bookwebapp.model.Author;
-import edu.wctc.apw.bookwebapp.model.Book;
+import edu.wctc.apw.bookwebapp.entity.Author;
+import edu.wctc.apw.bookwebapp.entity.Book;
+import edu.wctc.apw.bookwebapp.service.AuthorService;
 
 import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 import javax.sql.DataSource;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  *
@@ -50,11 +53,7 @@ public class AuthorController extends HttpServlet {
     private String password;
     private String dbJndiName; 
     
-    @Inject
-     private AuthorFacade authorServ;
-    
-     @Inject
-     private BookFacade bookServ;
+    private AuthorService authorServ;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -277,10 +276,20 @@ public class AuthorController extends HttpServlet {
     
     private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
         int Id = Integer.parseInt(authorId);
+        // this wont work because you didn't give author a bookset to start with. thats why you needed this to begin with.
         List<Book> books = bookServ.findByAuthorId(Id);
         request.setAttribute("bookList", books);
     }
     
+    @Override
+    public void init() throws ServletException {
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        WebApplicationContext ctx
+                = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        authorServ = (AuthorService) ctx.getBean("authorService");
+
+    }
     
      private void refreshList(HttpServletRequest request) throws Exception {
         List<Author> authors = authorServ.findAll();
