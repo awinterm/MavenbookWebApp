@@ -7,9 +7,11 @@ package edu.wctc.apw.bookwebapp.ejb;
 
 import edu.wctc.apw.bookwebapp.model.Author;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,7 +19,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class AuthorFacade extends AbstractFacade<Author> {
-
+    // jims version unitName = "book_PU" dunno.
     @PersistenceContext(unitName = "edu.wctc.apw_bookWebApp_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -49,5 +51,10 @@ public class AuthorFacade extends AbstractFacade<Author> {
         this.getEntityManager().merge(author);
     }
     
-    
+      public List<Author> findByName(String name) {
+        String jpql = "select a from Author where a.authorName = ?1";
+        Query q = getEntityManager().createQuery(jpql);
+        q.setParameter(1, name);
+        return q.getResultList();
+    }
 }

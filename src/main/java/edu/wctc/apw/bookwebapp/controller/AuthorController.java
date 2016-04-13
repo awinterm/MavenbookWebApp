@@ -5,6 +5,7 @@
  */
 package edu.wctc.apw.bookwebapp.controller;
 
+import edu.wctc.apw.bookwebapp.ejb.AbstractFacade;
 import edu.wctc.apw.bookwebapp.ejb.AuthorFacade;
 import edu.wctc.apw.bookwebapp.ejb.BookFacade;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.model.Author;
 import edu.wctc.apw.bookwebapp.model.Book;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.naming.Context;
@@ -29,33 +31,35 @@ import javax.sql.DataSource;
  *
  * @author andre_000
  */
-@WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
+// the main controller for author related activities the servlet is configured in web.xml no need for annotations here.
 public class AuthorController extends HttpServlet {
-     private static final String RESPONSE_PAGE = "/ResponsePage.jsp";
-     private static final String BOOK_PAGE = "/bookListjsp.jsp";
-     private static final String ACTION_PARAMETER = "action";
-     private static final String GET_AUTHOR_LIST_ACTION = "getList";
-     private static final String NO_PARAMETER_MSG = "No matching parameter found";
-     
-     private static final String SUBMIT_ACTION = "submit";
-     private static final String DELETE_ACTION = "delete";
-     private static final String EDIT_ACTION = "edit";
-     private static final String ADD = "add";
-     private static final String EDIT_DELETE_ACTION = "editDelete";
+
+    private static final String RESPONSE_PAGE = "/ResponsePage.jsp";
+    private static final String BOOK_PAGE = "/bookListjsp.jsp";
+    private static final String ACTION_PARAMETER = "action";
+    private static final String GET_AUTHOR_LIST_ACTION = "getList";
+    private static final String NO_PARAMETER_MSG = "No matching parameter found";
+
+    private static final String SUBMIT_ACTION = "submit";
+    private static final String DELETE_ACTION = "delete";
+    private static final String EDIT_ACTION = "edit";
+    private static final String ADD = "add";
+    private static final String EDIT_DELETE_ACTION = "editDelete";
 // WAY MORE CONSTANTS GO HERE! 
-     
+
     private String driverClass;
     private String url;
     private String userName;
     private String password;
-    private String dbJndiName; 
-    
+    private String dbJndiName;
+
     @Inject
-     private AuthorFacade authorServ;
-    
-     @Inject
-     private BookFacade bookServ;
-    
+    private AbstractFacade<Author> authorServ;
+
+    // jim does not have this.
+    @Inject
+    private BookFacade bookServ;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -68,63 +72,74 @@ public class AuthorController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String destination = RESPONSE_PAGE;
         String action = request.getParameter(ACTION_PARAMETER);
-        
-        
-        
-        try{
-            
+        Author author = null;
+
+        try {
+
 //            configDbConnection();
-        switch (action) {
+            switch (action) {
                 case GET_AUTHOR_LIST_ACTION:
-                        // Jim made a method out of this. If I reuse these two lines I will do the same.
-                        this.refreshList(request);
-                        // if you have two or more pages this tool can send to then this next line is smart.
-                        destination = RESPONSE_PAGE;
+                    // Jim made a method out of this. If I reuse these two lines I will do the same.
+                    this.refreshList(request, authorServ);
+                    // if you have two or more pages this tool can send to then this next line is smart.
+                    destination = RESPONSE_PAGE;
                     break;
 
                 case ADD:
                     String authorName = request.getParameter("name");
                     // not good to hard code null here but.... Its cool for now.
-                    authorServ.saveOrUpdate(null, authorName);
-                    this.refreshList(request);
+                    author = new Author();
+                    author.setAuthorName(authorName);
+                    author.setDateAdded(new Date());
+
+                    authorServ.edit(author);
+                    this.refreshList(request, authorServ);
                     destination = RESPONSE_PAGE;
                     break;
-                    
+
                 case EDIT_DELETE_ACTION:
                     String subAction = request.getParameter(SUBMIT_ACTION);
                     System.out.println(subAction);
                     if (subAction.equals(DELETE_ACTION)) {
-                         String authorId = request.getParameter("id");
-                         authorServ.deleteById(authorId);
-                         destination = RESPONSE_PAGE;
-                         
-                         
-                    } else if((subAction.equals(EDIT_ACTION))){
+
+                        String authorId = request.getParameter("id");
+                        System.out.println(authorId);
+                        author = authorServ.find(new Integer(authorId));
+
+                        authorServ.remove(author);
+
+                        // jim also sends the service object here.
+                        this.refreshList(request, authorServ);
+                        destination = RESPONSE_PAGE;
+
+                    } else if ((subAction.equals(EDIT_ACTION))) {
                         String name = request.getParameter("name");
                         String authorId = request.getParameter("id");
                         String date = request.getParameter("date");
-                        authorServ.saveOrUpdate(authorId, name); 
+
+                        author = authorServ.find(new Integer(authorId));
+                        author.setAuthorName(name);
+
+                        authorServ.edit(author);
                         destination = RESPONSE_PAGE;
-                    } else if((subAction.equalsIgnoreCase("books"))){
-                        
-                        String authorId = request.getParameter("id");   
+                    } // this may be bad thinking all together.
+                    else if ((subAction.equalsIgnoreCase("books"))) {
+
+                        String authorId = request.getParameter("id");
                         refreshBookList(request, authorId);
                         destination = BOOK_PAGE;
                         System.out.println("I'M TRYING TO go to " + destination);
-                    }
-                    
-                    
-                    else {
+                    } else {
                         // must be cancel do nothing
-                        
+
                     }
-                    
-                    this.refreshList(request);
+
+                    this.refreshList(request, authorServ);
                     break;
-                    default:
+                default:
                     // no param identified in request, must be an error
                     request.setAttribute("errMsg", NO_PARAMETER_MSG);
 //                    destination = RESPONSE_PAGE;
@@ -135,12 +150,10 @@ public class AuthorController extends HttpServlet {
             request.setAttribute("errMsg", e.getMessage());
         }
 
-        RequestDispatcher view =
-                    request.getRequestDispatcher(destination);
-           view.forward(request, response);
+        RequestDispatcher view
+                = request.getRequestDispatcher(destination);
+        view.forward(request, response);
     }
-
-
 
 //                        // must be add or edit, go to addEdit page
 //                        String[] authorIds = request.getParameterValues("authorId");
@@ -171,7 +184,6 @@ public class AuthorController extends HttpServlet {
 //                        destination = RESPONSE_PAGE;
 //                    }
 //                    break;
-
 //                default:
 //                    // no param identified in request, must be an error
 //                    request.setAttribute("errMsg", NO_PARAMETER_MSG);
@@ -182,7 +194,6 @@ public class AuthorController extends HttpServlet {
 //        } catch (Exception e) {
 //            request.setAttribute("errMsg", "Something Bad");
 //        }
-              
 //        try{
 //            
 ////            AuthorService authorServ = new AuthorService();
@@ -200,7 +211,6 @@ public class AuthorController extends HttpServlet {
 //                    request.getRequestDispatcher(destination);
 //           view.forward(request, response);
 //    }
-    
 //     private void configDbConnection() throws NamingException, Exception { 
 //        if(dbJndiName == null) {
 //            authorServ.getDao().initDao(driverClass, url, userName, password);   
@@ -214,7 +224,6 @@ public class AuthorController extends HttpServlet {
 //            authorServ.getDao().initDao(ds);
 //        }
 //    }
-    
 //    
 //    
 //    private void configDbConnection() { 
@@ -223,10 +232,8 @@ public class AuthorController extends HttpServlet {
 //        
 //    }
 //    
-    
 //
 //    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -274,20 +281,15 @@ public class AuthorController extends HttpServlet {
 ////        password = getServletContext().getInitParameter("db.password");
 //        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
 //    }
-    
     private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
         int Id = Integer.parseInt(authorId);
         List<Book> books = bookServ.findByAuthorId(Id);
         request.setAttribute("bookList", books);
     }
-    
-    
-     private void refreshList(HttpServletRequest request) throws Exception {
-        List<Author> authors = authorServ.findAll();
+
+    private void refreshList(HttpServletRequest request, AbstractFacade<Author> authService) throws Exception {
+        List<Author> authors = authService.findAll();
         request.setAttribute("authorList", authors);
     }
-    
-    
+
 }
-
-
