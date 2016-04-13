@@ -131,7 +131,7 @@ public class AuthorController extends HttpServlet {
                         String authorId = request.getParameter("id");
                         refreshBookList(request, authorId);
                         destination = BOOK_PAGE;
-                        System.out.println("I'M TRYING TO go to " + destination);
+                        
                     } else {
                         // must be cancel do nothing
 
