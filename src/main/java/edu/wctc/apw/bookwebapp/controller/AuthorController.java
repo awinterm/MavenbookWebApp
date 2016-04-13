@@ -87,7 +87,7 @@ public class AuthorController extends HttpServlet {
                 case ADD:
                     String authorName = request.getParameter("name");
                     // not good to hard code null here but.... Its cool for now.
-                    authorServ.saveOrUpdate(null, authorName);
+//                    authorServ.saveOrUpdate(null, authorName);
                     this.refreshList(request);
                     destination = RESPONSE_PAGE;
                     break;
@@ -97,7 +97,7 @@ public class AuthorController extends HttpServlet {
                     System.out.println(subAction);
                     if (subAction.equals(DELETE_ACTION)) {
                          String authorId = request.getParameter("id");
-                         authorServ.deleteById(authorId);
+//                         authorServ.deleteById(authorId);
                          destination = RESPONSE_PAGE;
                          
                          
@@ -105,7 +105,7 @@ public class AuthorController extends HttpServlet {
                         String name = request.getParameter("name");
                         String authorId = request.getParameter("id");
                         String date = request.getParameter("date");
-                        authorServ.saveOrUpdate(authorId, name); 
+//                        authorServ.saveOrUpdate(authorId, name); 
                         destination = RESPONSE_PAGE;
                     } else if((subAction.equalsIgnoreCase("books"))){
                         
@@ -277,8 +277,8 @@ public class AuthorController extends HttpServlet {
     private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
         int Id = Integer.parseInt(authorId);
         // this wont work because you didn't give author a bookset to start with. thats why you needed this to begin with.
-        List<Book> books = bookServ.findByAuthorId(Id);
-        request.setAttribute("bookList", books);
+//        List<Book> books = bookServ.findByAuthorId(Id);
+//        request.setAttribute("bookList", books);
     }
     
     @Override
