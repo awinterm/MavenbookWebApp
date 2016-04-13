@@ -14,8 +14,8 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>BookController</servlet-name>
-        <servlet-class>edu.wctc.apw.bookwebapp.controller.BookController</servlet-class>
+        <servlet-name>BookController2</servlet-name>
+        <servlet-class>edu.wctc.apw.bookwebapp.controller.BookController2</servlet-class>
     </servlet>
     <servlet-mapping>
         <!-- reference private config alias -->
@@ -24,8 +24,8 @@
         <url-pattern>/AuthorController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>BookController</servlet-name>
-        <url-pattern>/BookController</url-pattern>
+        <servlet-name>BookController2</servlet-name>
+        <url-pattern>/BookController2</url-pattern>
     </servlet-mapping>
     
     <session-config>

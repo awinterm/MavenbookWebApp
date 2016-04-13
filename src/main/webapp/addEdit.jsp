@@ -21,13 +21,13 @@
        
 
         <div class="col-md-10" align="right">
-            <form method="POST" action="<%= response.encodeURL("BookController")%>"  name="addEdit">
-                <input action="<%= response.encodeURL("BookController")%>" type="submit" value="Cancel" name="action" />
+            <form method="POST" action="<%= response.encodeURL("BookController2")%>"  name="addEdit">
+                <input action="<%= response.encodeURL("BookController2")%>" type="submit" value="Cancel" name="action" />
             </form>
         </div>
         <div class="col-md-6" align="center">
 
-            <form method="POST" action="<%= response.encodeURL("BookController")%>"  name="addEdit">
+            <form method="POST" action="<%= response.encodeURL("BookController2")%>"  name="addEdit">
 
                 <table width="auto" border="1" cellspacing="0" cellpadding="4" >
 

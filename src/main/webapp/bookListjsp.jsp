@@ -49,7 +49,7 @@
                         </thead>
 
 
-                        <tbody>
+                        <tbody> 
 
                             <c:forEach var="book" items="${books}">
                                 <tr class="${book.bookId}" name="${book.bookId}" id=${book.bookId} >

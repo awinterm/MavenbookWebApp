@@ -284,7 +284,7 @@ public class AuthorController extends HttpServlet {
     private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
         int Id = Integer.parseInt(authorId);
         List<Book> books = bookServ.findByAuthorId(Id);
-        request.setAttribute("bookList", books);
+        request.setAttribute("book", books);
     }
 
     private void refreshList(HttpServletRequest request, AbstractFacade<Author> authService) throws Exception {
