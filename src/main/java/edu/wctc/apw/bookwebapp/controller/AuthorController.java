@@ -129,6 +129,10 @@ public class AuthorController extends HttpServlet {
                     else if ((subAction.equalsIgnoreCase("books"))) {
 
                         String authorId = request.getParameter("id");
+                        
+                        // this works fine for what you are doing.
+                        // however you should try playing with the bookSet
+                        
                         refreshBookList(request, authorId);
                         destination = BOOK_PAGE;
                         
@@ -284,7 +288,7 @@ public class AuthorController extends HttpServlet {
     private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
         int Id = Integer.parseInt(authorId);
         List<Book> books = bookServ.findByAuthorId(Id);
-        request.setAttribute("book", books);
+        request.setAttribute("books", books);
     }
 
     private void refreshList(HttpServletRequest request, AbstractFacade<Author> authService) throws Exception {

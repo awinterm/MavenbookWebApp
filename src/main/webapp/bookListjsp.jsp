@@ -25,7 +25,7 @@
     <body>
        
          <div class="col-md-11" align="right">
-        <form method="POST" action=<%= response.encodeURL("BookController") %>>
+        <form method="POST" action=<%= response.encodeURL("BookController2") %>>
         <input class="btn"  type="submit" name="action" value="logOut" align="right"  />
         </form>
          </div>
@@ -34,7 +34,7 @@
             <div class="row" >
                 <h1>Book List</h1>
                 <div class="col-md-8 ScrollStyle">
-                    <form method="POST" action=<%= response.encodeURL("BookController") %>>
+                    <form method="POST" action=<%= response.encodeURL("BookController2") %>>
                         <input type="hidden" name="action" value="addEditDelete" />
                         <input class="btn"  type="submit" name="submit" value="Add"  />
                     </form>
@@ -63,7 +63,7 @@
                                         <c:out value="${book.isbn}"/>
                                     </td>
                                     <td>
-                                        <form method="POST" action="BookController">
+                                        <form method="POST" action="BookController2">
                                             <input type="hidden" name="action" value="addEditDelete" />
                                             <input type="hidden" name="bookId" value="${book.bookId}" />
                                             
