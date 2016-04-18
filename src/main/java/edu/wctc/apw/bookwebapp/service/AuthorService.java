@@ -55,9 +55,9 @@ public class AuthorService {
 //        return authorRepo.findByIdAndFetchBooksEagerly(authorId);
 
         // Instead do this, it's faster
-        Author author = authorRepo.findOne(authorId);
+        Author author = findById(id);
         // DREW LOOK HERE DUDE!!!!! THIS DIDNT WORK CAUSE YOUR AUTHOR DOESNT HAVE. 
-//        author.getBookSet().size();
+        int size = author.getBookSet().size();
         return author;
     }
 

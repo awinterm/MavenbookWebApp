@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.entity.Author;
 import edu.wctc.apw.bookwebapp.entity.Book;
 import edu.wctc.apw.bookwebapp.service.AuthorService;
+import java.util.Date;
+import java.util.LinkedHashSet;
 
 import javax.inject.Inject;
 import javax.naming.Context;
@@ -70,6 +72,7 @@ public class AuthorController extends HttpServlet {
         
         String destination = RESPONSE_PAGE;
         String action = request.getParameter(ACTION_PARAMETER);
+        Author author = null;
         
         
         
@@ -86,8 +89,11 @@ public class AuthorController extends HttpServlet {
 
                 case ADD:
                     String authorName = request.getParameter("name");
+                    author = new Author(0);
+                    author.setAuthorName(authorName);
+                    author.setDateAdded(new Date());
                     // not good to hard code null here but.... Its cool for now.
-//                    authorServ.saveOrUpdate(null, authorName);
+                     authorServ.edit(author);
                     this.refreshList(request);
                     destination = RESPONSE_PAGE;
                     break;
@@ -97,15 +103,27 @@ public class AuthorController extends HttpServlet {
                     System.out.println(subAction);
                     if (subAction.equals(DELETE_ACTION)) {
                          String authorId = request.getParameter("id");
-//                         authorServ.deleteById(authorId);
+                         author = authorServ.findByIdAndFetchBooksEagerly(authorId);
+                         if(author == null) {
+                                author = authorServ.findById(authorId);
+                                author.setBookSet(new LinkedHashSet<Book>());
+                            }
+                          authorServ.remove(author);
                          destination = RESPONSE_PAGE;
                          
                          
                     } else if((subAction.equals(EDIT_ACTION))){
                         String name = request.getParameter("name");
                         String authorId = request.getParameter("id");
-                        String date = request.getParameter("date");
-//                        authorServ.saveOrUpdate(authorId, name); 
+                        
+                        author = authorServ.findByIdAndFetchBooksEagerly(authorId);
+                         if(author == null) {
+                                author = authorServ.findById(authorId);
+                                author.setBookSet(new LinkedHashSet<Book>());
+                            }
+                        author.setAuthorName(name);
+                        
+                        authorServ.edit(author);
                         destination = RESPONSE_PAGE;
                     } else if((subAction.equalsIgnoreCase("books"))){
                         

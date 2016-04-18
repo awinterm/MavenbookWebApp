@@ -8,6 +8,7 @@ package edu.wctc.apw.bookwebapp.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -55,6 +56,9 @@ public class Author implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateAdded;
 
+    @OneToMany(mappedBy = "authorId", cascade = CascadeType.ALL)
+    private Set<Book> bookSet;
+    
     public Author() {
     }
 
@@ -84,6 +88,15 @@ public class Author implements Serializable {
 
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
+    }
+    
+    @XmlTransient
+    public Set<Book> getBookSet() {
+        return bookSet;
+    }
+
+    public void setBookSet(Set<Book> bookSet) {
+        this.bookSet = bookSet;
     }
 
     @Override
