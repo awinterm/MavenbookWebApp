@@ -37,8 +37,8 @@
                             <tr style="background-color: #ccffff;">
                             </c:otherwise>
                         </c:choose>
-                        <td><input type="checkbox" name="bookId" value="${b.bookId}" /></td>
-                        <td align="left">${b.title}</td>
+                        <td><input type="hidden" name="bookId" value="${b.bookId}" /></td>
+                        <td align="left">${b.tittle}</td>
                         <td align="left">${b.isbn}</td>
                         <td align="left">
                             <c:choose>

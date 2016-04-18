@@ -18,8 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import edu.wctc.apw.bookwebapp.entity.Author;
 import edu.wctc.apw.bookwebapp.entity.Book;
 import edu.wctc.apw.bookwebapp.service.AuthorService;
+import edu.wctc.apw.bookwebapp.service.BookService;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.naming.Context;
@@ -56,6 +58,8 @@ public class AuthorController extends HttpServlet {
     private String dbJndiName; 
     
     private AuthorService authorServ;
+    
+    private BookService bookServ;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -295,8 +299,10 @@ public class AuthorController extends HttpServlet {
     private void refreshBookList(HttpServletRequest request, String authorId) throws Exception {
         int Id = Integer.parseInt(authorId);
         // this wont work because you didn't give author a bookset to start with. thats why you needed this to begin with.
-//        List<Book> books = bookServ.findByAuthorId(Id);
-//        request.setAttribute("bookList", books);
+        Author author = authorServ.findByIdAndFetchBooksEagerly(authorId);
+        Set<Book> books = author.getBookSet();
+        
+        request.setAttribute("bookList", books);
     }
     
     @Override
