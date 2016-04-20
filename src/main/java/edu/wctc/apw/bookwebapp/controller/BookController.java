@@ -32,7 +32,7 @@ import edu.wctc.apw.bookwebapp.service.BookService;
 public class BookController extends HttpServlet {
     
     private static final String ACTION_PARAMETER = "action";
-    private static final String BOOK_LIST_PAGE = "/bookListjsp.jsp";
+    private static final String BOOK_LIST_PAGE = "/addEditBooks.jsp";
     
     private static final String SUBMIT_ACTION = "submit";
     
