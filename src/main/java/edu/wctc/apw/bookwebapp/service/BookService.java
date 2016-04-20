@@ -4,6 +4,7 @@ import edu.wctc.apw.bookwebapp.entity.Book;
 import edu.wctc.apw.bookwebapp.repository.AuthorRepository;
 import edu.wctc.apw.bookwebapp.repository.BookRepository;
 import java.util.List;
+import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

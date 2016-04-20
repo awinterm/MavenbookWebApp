@@ -23,6 +23,9 @@ import edu.wctc.apw.bookwebapp.entity.Author;
 import edu.wctc.apw.bookwebapp.entity.Book;
 import edu.wctc.apw.bookwebapp.service.AuthorService;
 import edu.wctc.apw.bookwebapp.service.BookService;
+import javax.servlet.ServletContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  *
@@ -32,7 +35,7 @@ import edu.wctc.apw.bookwebapp.service.BookService;
 public class BookController extends HttpServlet {
     
     private static final String ACTION_PARAMETER = "action";
-    private static final String BOOK_LIST_PAGE = "/addEditBooks.jsp";
+    private static final String BOOK_LIST_PAGE = "/bookListjsp.jsp";
     
     private static final String SUBMIT_ACTION = "submit";
     
@@ -91,8 +94,9 @@ public class BookController extends HttpServlet {
                         bookId = request.getParameter("bookId");
                         System.out.println(bookId);
                         destination = ADD_EDIT_PAGE;
+                        System.out.println("MONKEY");
                         book = bookServ.findById(bookId);
-                        
+                        System.out.println("MONKEY");
                         request.setAttribute("book", book);
                         this.refreshAuthorList(request, authorServ);
                     } 
@@ -193,7 +197,17 @@ public class BookController extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
+    
+        @Override
+   public void init() throws ServletException {
+       // Ask Spring for object to inject
+       ServletContext sctx = getServletContext();
+       WebApplicationContext ctx
+               = WebApplicationContextUtils.getWebApplicationContext(sctx);
+       authorServ = (AuthorService) ctx.getBean("authorService");
+       bookServ = (BookService) ctx.getBean("bookService");
+   }
+    
     /**
      * Returns a short description of the servlet.
      *
@@ -204,9 +218,14 @@ public class BookController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
+    
+    
+    
 private void refreshBookList(HttpServletRequest request, BookService bookService) throws Exception {
         List<Book> books = bookService.findAll();
-        request.setAttribute("books", books);
+        request.setAttribute("bookList", books);
     }
 
 private void refreshAuthorList(HttpServletRequest request, AuthorService authService) throws Exception {
