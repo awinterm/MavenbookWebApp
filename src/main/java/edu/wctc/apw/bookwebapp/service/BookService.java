@@ -55,6 +55,7 @@ public class BookService {
     public void remove(Book book) {
         LOG.debug("Deleting book: " + book.getTittle());
         bookRepo.delete(book);
+        System.out.println("Deleting Book maybe");
     }
 
     /**

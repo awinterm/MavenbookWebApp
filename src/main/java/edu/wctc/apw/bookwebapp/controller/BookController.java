@@ -85,8 +85,14 @@ public class BookController extends HttpServlet {
                     if (subAction.equals(DELETE_ACTION)) {
                         
                         System.out.println(bookId);
+                        try{
                         book = bookServ.findById(bookId);
+                        System.out.println(book.toString());
                         bookServ.remove(book);
+                        } catch(Exception e){
+                            System.out.println("WHOOPS" + e.getMessage());
+                        }
+                        
                         this.refreshBookList(request, bookServ);
                         destination = BOOK_LIST_PAGE;
                         
